@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div><iframe name="frame1" id="frame1" src="frm.html" frameborder="1" height="60"></iframe></div>
+        
+        <p>iframe1中文本框的值：<input type="button" name="Submit" value="getValue" onclick="getValue()" /></p>
+    </body>
+        
+        
+    <script type="text/javascript">
+    function getValue()
+    {
+        var ofrm1 = document.getElementById("frame1").document;    
+        if (ofrm1==undefined)
+        {
+            ofrm1 = document.getElementById("frame1").contentWindow.document;
+            var ff = ofrm1.getElementById("txt1").value;
+            alert("firefox/chrome取值结果为:" + ff);
+        }
+        else
+        {
+            var ie = document.frames["frame1"].document.getElementById("txt1").value;
+            alert("ie取值结果为:" + ie);
+        } 
+    }
+    </script>
+</html>
+
+    

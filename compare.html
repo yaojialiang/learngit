@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript">
+            window.onload = function(){
+                var obj = [{bigAmountYuan:1000,endAmountYuan:2000},{bigAmountYuan:3000,endAmountYuan:4000},{bigAmountYuan:5000,endAmountYuan:6000}]
+
+
+                function fit(temp,obj){
+                    for(var i=0;i<obj.length;i++){
+                        if(temp>=obj[i].bigAmountYuan && temp<= obj[i].endAmountYuan){
+                            console.log(obj[i]);
+                            return obj[i];
+                        }
+                    }
+                }
+
+                var numBtn = document.getElementById("btn");
+
+                numBtn.onclick = function(){
+                    
+                    fit(numInput.value,obj);
+                }
+            }
+            
+        </script>
+    </head>
+    <body>
+        <input type="text" id="numInput" />
+        <button id="btn">筛选</button>
+    </body>
+
+</html>

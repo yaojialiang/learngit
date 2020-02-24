@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+        var salesOffices = {}
+        salesOffices.chatList = [];
+        salesOffices.listen = function(key, fn){
+            if (!this.chatList[key]) {
+                this.chatList[key] = [];
+            }
+            this.chatList[key].push(fn);
+        };
+
+        salesOffices.trigger = function() {
+            var key = Array.prototype.shift.call(arguments);
+            var fns = this.chatList[key];
+            if (!fns || fns.lenght == 0) {
+                return false;
+            }
+            for(var i = 0, fn; fn = fns[i++];){
+                fn.apply(this, arguments);
+            }
+        };
+
+        salesOffices.listen('squreMeter88', function(price){
+            console.log(price);
+        });
+
+        salesOffices.listen('squreMeter110', function(price){
+            console.log(price);
+        });
+
+        // salesOffices.trigger('squreMeter88', 200000);
+        // salesOffices.trigger('squreMeter110', 300000);
+    </script>
+</html>

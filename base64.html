@@ -1,0 +1,44 @@
+<!--
+Content-Type: multipart/related; boundary="imagedata"
+
+--imagedata
+Content-Type: image/jpeg
+Content-Location: showimg
+Content-Transfer-Encoding: base64
+
+/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBAQFBAYFBQYJBgUGCQsIBgYICwwKCgsKCgwQDAwMDAwMEAwODxAPDgwTExQUExMcGxsbHCAgICAgICAgICD/2wBDAQcHBw0MDRgQEBgaFREVGiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICD/wAARCAAQABADAREAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAABAUGB//EACQQAAEFAAIBAwUAAAAAAAAAAAQBAgMFBgcSEwARIRQjJDFR/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/ANfutxoRtBYDOvKqmAZeCZypjKqjD5pzC68YxiOkgNHa3s4hzU92I1ET5X0EfRck7y75LzFbZFiz4u6KtoKgyn/CU+SkayRxM33rF30vnicyJkZDPKnzIixr0cAnMh+lAN1uTk4/sdfn9e8ezSwqZCWKOrBRhGxuWMQhiTRTV3lROyoqK3snt7p6Bfjr3YablLjaKXjq1yFBkILEWKUppU0KQzV3hha6aYeDr18DWornKrlX+/sP/9k=
+
+--imagedata
+Content-Type: image/jpeg
+Content-Location: erwei
+Content-Transfer-Encoding: base64
+
+iVBORw0KGgoAAAANSUhEUgAAAQkAAAEJAQMAAAC9pkAnAAAABlBMVEX///8AAABVwtN+AAADRElEQVRoge1ZQa6rMAw06iJLjpCbwMWQqNSL0ZtwBJYsEH4z40S/1V8/yYsXqYgmw8KJPR47Zn/jN8fs7ud84G3wZy1+LFY2LkwjVu5skAm/c/arnpM9dsxe5u9jqX6Pz1jNBRl9x6pVvGFugEUYq5d7fPmZEzL70wqNwVE8nEeBU8gLsRHb7v5yjt03HIVZTgj9hXt/djBdBbbZt0slgSgap/G1///4CtgkkBjcbLOHy45Ci3yz75EDQn8++eLb+KwwQo7+2mEMGSQbZLJ1B2XImCtwgDSS7i6VB8Idx2av7m+XU7/wBfkZ1FzPdBA9hoMhCcoQSeOxOk5m/Uh8WSDIGkh3R5yCEl89GaFKfPkgc3OLeg6dlU8Z86bTbOkgiDzJCvgzch75WYGIVfy1bBDoiEofr+WmMXwLQmHuDsLLBMEBVIqJXaISYuIKDaeUXe5sEJnAUeggPA8pZLIyP8sGob+4dDshEhj0HK6ukWJSQQaYEHt/c24iITMuMXfVxoSJIPBiqjRs+xB7v4SrCNKFUibIhb1HJhG5Nc8GU/OzvXNdHgj1mvKH/IUyfsck+ZmnYNkgUkFS8E0KieGWoL5WNieCME/LSyjVWHXA2yWF+FbubJBJf82k3JRJQrlRFHWhlAjCbadur+Q1BeIucOFbSQchzUkKSaVFD4WerRI0H4QCjSqtacxWFWFuEIMkhOzGxBx2kOaQ+Kgxjx6NmSAkD9VHqjmxCkcnpMVlNogUvMIvdjychjTCEm/LBokejy0WeZoVcxGNCGfZIGayiOShWoPdKMzVkPZTOgibZ4OropeDwL0piqAy/qXyTBCVRkp8alsvFjmv6eJkEF4FqPErf1E0ivpg0as3BhNBuPcq4jjHo2A0ssQzNt0tHeRo2Tn6ZkM81I9YWjSmglDBe3QqHxQTaqsvvHKxdk2UCaKOgwrjuSv4uNCSHrqzQTTUUafnkPCiDo3PLBsEYqIVnkPU9i0k7SNPJ4LEbQsdhIQXdyz67EPkZ4Lo6o3KrdehgoSC/7ydSwTRKgmPedDVVaMKSguJQXILA8F/m3XySAWRv4xXFdeR4SoSi0d31dNB5MpBc1zVpfxtSidrqz4zQf7G740fRv/fkMs0DyUAAAAASUVORK5CYII=
+
+-->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=GB2312" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+<title>base64图片兼容性测试</title>
+</head>
+<body>
+    <div id="useragent" style="width:200px;"></div>
+    <div id="showimg" style="width:100px; height:100px; float:left; *background-image:expression('url(mhtml:' + location.href + '!showimg)');"></div>
+    <div id="erwei" style="width:100px; height:100px; float:left; *background-image:expression('url(mhtml:' + location.href + '!img2)');"></div>
+    <script type="text/javascript">
+    function setImage(obj) {
+        // for ie6、ie7、ie8
+        if (!/Trident/.test(navigator.userAgent) && /MSIE [6-8]\.0.*Windows NT 5\./.test(navigator.userAgent)) return "";
+        //for ie9 or later、FireFox 、chrome 、Opera
+        var html = document.firstChild.nodeValue;
+        var reg = new RegExp("--imagedata\\s*[\\r\\n]+Content-Type:\\s*(image\\/\\w+)\s*[\\r\\n\\s]+Content-Location:\\s*" + obj + "\\s*Content-Transfer-Encoding:\\s*base64\\s*[\\r\\n\\s]+([a-zA-Z0-9\\/\\+\\r\\n=]+)", "g");
+        var codePart = reg.exec(html);
+        document.getElementById(obj).style.backgroundImage = "url(data:" + codePart[1] + ";base64," + codePart[2] + ")";
+        document.getElementById("useragent").innerHTML = navigator.userAgent;
+    }
+    // setImage("showimg");
+    setImage("erwei");
+    </script>
+</body>
+</html>

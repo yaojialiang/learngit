@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript">
+            const PENDING = "pending";
+            const FULFILLED = "fulfilled";
+            const REJECTED = "rejected";
+
+            function MyPromise(fn) {
+                var self = this;
+                self.value = null;
+                self.error = null;
+                self.status = PENDING;
+                self.onFulfilledCallbacks = [];
+                self.onRejectedCallbacks = [];
+
+                function resolve(value) {
+                    if (self.status === PENDING) {
+                        setTimeout(() => {
+                            self.status = FULFILLED;
+                            self.value = value;
+                            self.onFulfilledCallbacks.forEach((callback) => callback(self.value));
+                        }, 0)
+                    }
+                }
+
+                function reject(error) {
+                    if (self.status === PENDING) {
+                        setTimeout(function() {
+                            self.status = REJECTED;
+                            self.error = error;
+                            self.onRejectedCallbacks.forEach((callback) => callback(self.error));
+                        }, 0)
+                    }
+                }
+                fn(resolve, reject);
+            }
+            // 解析promise(解析传入的回调函数是否是prosmie,如果是promise而且是等待状态要进行异步串行)
+            function resolvePromise(bridgePromise, x, resolve, reject) {
+                if (x instanceof MyPromise) {
+                    if (x.status === PENDING) {
+                        
+                        // 如果回调函数返回一个promise并且状态还是pending，就在这个promise的then方法中继续解析这个promise reslove传过来的值(这里使用了递归的方法进行检测这个promise的状态，直到它变成完成或失败状态)
+                        x.then(
+                            y => {
+                                console.log(y);
+                                resolvePromise(bridgePromise, y, resolve, reject);
+                            }, 
+                            error => {
+                                reject(error);
+                            }
+                        );
+                    } 
+                    // 其他状态则执行链式上的操作
+                    else {
+                        x.then(resolve, reject);
+                    }
+                } else {
+                    resolve(x);
+                }
+            }
+
+            MyPromise.prototype.then = function(onFulfilled, onRejected) {
+                const self = this;
+                let bridgePromise;
+                // 默认回调函数防止不传回调函数
+                onFulfilled = typeof onFulfilled === "function" ? onFulfilled : value => value;
+                onRejected = typeof onRejected === "function" ? onRejected : error => { throw error };
+
+                if (self.status === FULFILLED) {
+                    // 返回了一个新的桥梁promise
+                    return bridgePromise = new MyPromise((resolve, reject) => {
+                        setTimeout(() => {
+                            try {
+                                let x = onFulfilled(self.value);
+                                resolvePromise(bridgePromise, x, resolve, reject);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        }, 0);
+                    })
+                }
+                if (self.status === REJECTED) {
+                    return bridgePromise = new MyPromise((resolve, reject) => {
+                        setTimeout(() => {
+                            try {
+                                let x = onRejected(self.error);
+                                resolvePromise(bridgePromise, x, resolve, reject);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        }, 0);
+                    });
+                }
+                if (self.status === PENDING) {
+                     // 返回了一个新的桥梁promise，方便链式调用
+                    return bridgePromise = new MyPromise((resolve, reject) => {
+                        // 给初始promise的回调函数数组添加一个回调函数
+                        self.onFulfilledCallbacks.push((value) => {
+                            try {
+                                let x = onFulfilled(value);
+                                resolvePromise(bridgePromise, x, resolve, reject);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+                        self.onRejectedCallbacks.push((error) => {
+                            try {
+                                let x = onRejected(error);
+                                resolvePromise(bridgePromise, x, resolve, reject);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                }
+            }
+            MyPromise.prototype.catch = function(onRejected) {
+                return this.then(null, onRejected);
+            }
+
+
+            var a = new MyPromise(function(resolve,reject){
+                setTimeout(function(){
+                    console.log("第一个")
+                    resolve();
+                },1200)
+            })
+            .then(fn1)
+            .then(function(){
+                return new MyPromise(function(resolve,reject){
+                    setTimeout(function(){
+                        console.log("第三个")
+                        reject();
+                    },110)
+                })
+            })
+            .then(function(){
+                console.log("第四个成功")
+            },function(){
+                console.log("第四个失败")
+            })
+
+            function fn1(){
+                return new MyPromise(function(resolve,reject){
+                    setTimeout(function(){
+                        console.log("第二个")
+                        resolve();
+                    },520)
+                })
+                .then(function(){
+                    return new MyPromise(function(resolve,reject){
+                        setTimeout(function(){
+                            console.log("第二个2")
+                            resolve();
+                        },120)
+                    })
+                })
+                .then(function(){
+                    return new MyPromise(function(resolve,reject){
+                        setTimeout(function(){
+                            console.log("第二个3")
+                            resolve();
+                        },50)
+                    })
+                })
+            }
+
+            // new Promise(function(resolve,reject){
+            //     setTimeout(function(){
+            //         console.log("第一个")
+            //         resolve();
+            //     },1200)
+            // })
+            // .then(function(){
+            //     return new Promise(function(resolve,reject){
+            //         setTimeout(function(){
+            //             console.log("第二个")
+            //             resolve();
+            //         },520)
+                    
+            //     })
+            // })
+            // .then(function(){
+            //     setTimeout(function(){
+            //         console.log("第三个")
+            //     },110)
+            // })
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

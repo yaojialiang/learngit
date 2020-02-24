@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style>
+.box{
+width: 100px;
+height: 100px;
+position: absolute;
+left:300.54px;
+background: red;
+}
+</style>
+</head>
+<body>
+<div class="box" id="box"></div>
+<script>
+
+var box=document.getElementById("box");
+/*
+
+left top 可以设置小数数值
+并且获取得到的时候也可以得到小数数值
+
+offsetLeft 获取的只能是整数！！
+
+弹性运动不能用于样式不能为负数的
+比如height padding
+
+*/
+function elasticSport(obj,oTarget){
+
+obj.timer=null;//定时器
+
+obj.oSpeed=0;//速度
+
+obj.left=0; //left
+
+clearInterval(obj.timer);
+
+obj.timer=setInterval(function(){
+
+obj.oSpeed+=(oTarget-obj.offsetLeft)/5;
+
+//摩擦力 总是会停止
+obj.oSpeed*=0.7;
+
+obj.left+=obj.oSpeed;
+
+//速度足够小 当前位置足够接近目标位置 停止计时器
+if(Math.abs(obj.oSpeed<1) && Math.abs(obj.left-oTarget)<1){
+
+clearInterval(obj.timer);
+obj.style.left=oTarget+"px";
+
+}
+
+else{
+
+obj.style.left=obj.left+"px";
+
+
+}
+
+document.title=obj.offsetLeft+" | 300";
+
+},1000/60);
+
+ 
+
+}
+
+elasticSport(box,300);
+
+
+</script>
+</body>
+</html>

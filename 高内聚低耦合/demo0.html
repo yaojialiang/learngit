@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    </body>
+    <script type="text/javascript">
+        // function login(){}
+
+        // login.prototype.success=function(){
+        //     var d=new welcome();
+        //     d.showDiv();
+        // }
+
+        // function welcome(){}
+
+        // welcome.prototype.showDiv=function(){
+
+        //     var div=document.createElement('div');
+
+        //     div.innerHTML='欢迎光临';
+
+        //     div.className='login';
+
+        //     document.body.appendChild(div);
+
+        // }
+
+
+        var definedEvent=function(){
+            this.events={};
+        }
+
+        definedEvent.prototype={
+
+            constructor:definedEvent,
+
+            addEvent:function(type,event){
+                if(typeof this.events[type]=='undefined'){
+                    this.events[type]=new Array();
+                }
+                this.events[type].push(event);
+            },
+
+            removeEvent:function(type,event){
+
+                if(this.events[type] instanceof Array){
+
+                    var events=this.events[type];
+
+                    for(var i=0,len=events.length;i<len;i++){
+
+                        if(events[i]==event){
+
+                            events.splice(i,1);
+
+                            break;
+
+                        }
+
+                    }
+
+                }
+            },
+
+            fire:function(params){
+
+                if(!params.target){
+
+                    params.target=this;
+                }
+
+                if(this.events[params.type] instanceof Array){
+
+                    var events=this.events[params.type];
+
+                    for(var i=0,len=events.length;i<len;i++){
+
+                        events[i](params);
+
+                    }
+
+                }
+
+            }
+        }
+
+        var myEvent = new definedEvent();
+
+        var wel = new welcome();
+
+        var log = new login();
+
+
+        function login(){}
+
+        login.prototype.success=function(){
+
+            myEvent.fire("myShowDivEvent");
+        }
+
+        function welcome(){
+
+            // this.bindEvent();
+        }
+
+        welcome.prototype.bindEvent=function(){
+            var that=this;
+            myEvent.addEvent("myShowDivEvent",that.showDiv.bind(that));
+        }
+
+        welcome.prototype.showDiv=function(){
+            var div=document.createElement('div');
+            div.innerHTML='欢迎光临';
+            div.className='login';
+            document.body.appendChild(div);
+        }
+
+        wel.bindEvent();
+        log.success();
+    </script>
+</html>

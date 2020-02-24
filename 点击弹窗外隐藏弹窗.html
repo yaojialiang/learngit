@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" charset="utf-8"></script>
+<style>
+.layer{
+position: absolute;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,.5);
+}
+.layer>div{
+width: 80%;
+height: 200px;
+background: #fff;
+margin: 50px auto;
+}
+</style>
+</head>
+<body>
+<div class="layer">
+<div>
+js中事件是会冒泡的，所以this是可以变化的，但event.target不会变化，它永远是直接接受事件的目标DOM元素<br>this和event.target都是dom对象
+</div>
+</div>
+
+
+<script>
+
+$('.layer').click(function(e){
+//console.log(e.target) 
+var layer_div = $('.layer>div');
+
+if(!layer_div.is(e.target) && layer_div.has(e.target).length === 0){ 
+$(".layer").hide();
+}
+
+});
+</script>
+</body>
+</html>
